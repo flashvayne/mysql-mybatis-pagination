@@ -1,4 +1,4 @@
-# mysql-mybatis-page
+# mysql-mybatis-pagination
 基于MySQL方言 SQL_CALC_FOUND_ROWS & FOUND_ROWS() 的轻量级分页组件  
 "mysql-mybatis-page-1.0.0.jar" Release Package 大小仅10kb
 ## 使用方法
@@ -6,8 +6,8 @@
 2.maven加载依赖。对于SpringBoot项目，启动时会自动装配组件，无需其他配置
 ```pom
 <dependency>
-    <groupId>com.github.flashvayne</groupId>
-    <artifactId>mysql-mybatis-page</artifactId>
+    <groupId>io.github.flashvayne</groupId>
+    <artifactId>mysql-mybatis-pagination</artifactId>
     <version>1.0.0</version>
 </dependency>
 ```
