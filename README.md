@@ -1,7 +1,8 @@
 [中文版文档](https://github.com/flashvayne/mysql-mybatis-page/blob/master/README_zh.md)
 
 # mysql-mybatis-page
-A very lightweight pagination interceptor based MySQL Dialect "SQL_CALC_FOUND_ROWS & FOUND_ROWS()"
+A very lightweight pagination interceptor based MySQL Dialect "SQL_CALC_FOUND_ROWS & FOUND_ROWS()"  
+The release "mysql-mybatis-page-1.0.0.jar" package size is only 10kb.
 ## Usage
 1.Pull project in master branch and build by "maven install".  
 2.Load maven dependency.  
