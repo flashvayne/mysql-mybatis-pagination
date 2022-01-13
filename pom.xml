@@ -5,17 +5,17 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>io.github.flashvayne</groupId>
-    <artifactId>mysql-mybatis-page</artifactId>
-    <version>1.0.0</version>
+    <artifactId>mysql-mybatis-pagination</artifactId>
+    <version>1.0.1</version>
 
-    <name>mysql-mybatis-page</name>
+    <name>mysql-mybatis-pagination</name>
     <description>基于MySQL方言 SQL_CALC_FOUND_ROWS 的轻量级分页组件</description>
-    <url>https://github.com/flashvayne/mysql-mybatis-page</url>
+    <url>https://github.com/flashvayne/mysql-mybatis-pagination</url>
 
     <licenses>
         <license>
             <name>The MIT License (MIT)</name>
-            <url>https://github.com/flashvayne/mysql-mybatis-page/blob/master/LICENSE</url>
+            <url>https://github.com/flashvayne/mysql-mybatis-pagination/blob/master/LICENSE</url>
         </license>
     </licenses>
 
@@ -27,9 +27,9 @@
     </developers>
 
     <scm>
-        <connection>scm:git:git@github.com/flashvayne/mysql-mybatis-page.git</connection>
-        <developerConnection>scm:git:git@github.com/flashvayne/mysql-mybatis-page.git</developerConnection>
-        <url>git@github.com/flashvayne/mysql-mybatis-page.git</url>
+        <connection>scm:git:git@github.com/flashvayne/mysql-mybatis-pagination.git</connection>
+        <developerConnection>scm:git:git@github.com/flashvayne/mysql-mybatis-pagination.git</developerConnection>
+        <url>git@github.com/flashvayne/mysql-mybatis-pagination.git</url>
     </scm>
 
     <properties>
