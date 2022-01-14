@@ -6,7 +6,7 @@
 
     <groupId>io.github.flashvayne</groupId>
     <artifactId>mysql-mybatis-pagination</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
 
     <name>mysql-mybatis-pagination</name>
     <description>基于MySQL方言 SQL_CALC_FOUND_ROWS 的轻量级分页组件</description>
@@ -51,6 +51,12 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-autoconfigure</artifactId>
             <version>2.6.2</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.20</version>
         </dependency>
     </dependencies>
 
