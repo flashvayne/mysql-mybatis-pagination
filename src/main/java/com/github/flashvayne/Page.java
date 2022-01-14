@@ -19,13 +19,13 @@ public class Page {
     }
 
     public static void start(int pageNum, int pageSize) {
-        PageInfo PageInfo = PageInfoThreadLocal.get();
-        if (PageInfo == null) {
-            PageInfo = new PageInfo();
+        PageInfo pageInfo = PageInfoThreadLocal.get();
+        if (pageInfo == null) {
+            pageInfo = new PageInfo();
         }
-        PageInfo.setStart((pageNum - 1) * pageSize);
-        PageInfo.setSize(pageSize);
-        PageInfoThreadLocal.set(PageInfo);
+        pageInfo.setPage(pageNum);
+        pageInfo.setSize(pageSize);
+        PageInfoThreadLocal.set(pageInfo);
     }
 
     public static PageInfo end(Object o){
