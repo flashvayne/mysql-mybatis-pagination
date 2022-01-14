@@ -28,14 +28,16 @@ import java.util.Properties;
 public class MysqlPageInterceptor implements Interceptor {
 
     private MappedStatement countMs;
+    private BoundSql countBoundSql;
     private static final String countSql = "select FOUND_ROWS()";
-
+    private static final String tmpTable = "$mysql_page_tmp_table_x$";
+    private static final String countMsId = "mysqlpage.count";
     @Override
     public Object intercept(Invocation invocation) throws Throwable {
         PageInfo pageInfo = Page.get();
         if(pageInfo == null) return invocation.proceed();
-        int start = pageInfo.getStart();
         int size = pageInfo.getSize();
+        int start = (pageInfo.getPage() - 1) * size;
         Object[] args = invocation.getArgs();
         MappedStatement ms = (MappedStatement) args[0];
         Object parameter = args[1];
@@ -53,13 +55,17 @@ public class MysqlPageInterceptor implements Interceptor {
         }
         MetaObject metaObject = SystemMetaObject.forObject(boundSql);
         String sql = (String) metaObject.getValue("sql");
-        metaObject.setValue("sql","select SQL_CALC_FOUND_ROWS" + sql.substring(sql.indexOf("select")+6) + " limit "+ start+","+size);
+        StringBuilder calcSqlBuild = new StringBuilder();
+        calcSqlBuild.append("select SQL_CALC_FOUND_ROWS * from (");
+        calcSqlBuild.append(sql).append(") ").append(tmpTable).append(" limit ").append(start).append(",").append(size);
+        metaObject.setValue("sql", calcSqlBuild.toString());
         List rsList = executor.query(ms,parameter,rowBounds,resultHandler,cacheKey,boundSql);
-        if(countMs == null) countMs = newCountMappedStatement(ms,"mysqlpage.count");
-        Object countResultList = executor.query(countMs,null,new RowBounds(),null,null,
-                new BoundSql(countMs.getConfiguration(), countSql, null, null));
+        if(countMs == null) {
+            countMs = newCountMappedStatement(ms,countMsId);
+            countBoundSql = new BoundSql(countMs.getConfiguration(), countSql, null, null);
+        }
+        Object countResultList = executor.query(countMs,null,new RowBounds(),null,null,countBoundSql);
         pageInfo.setTotal(((Number) ((List) countResultList).get(0)).longValue());
-        Page.set(pageInfo);
         return rsList;
     }
 
@@ -76,12 +82,10 @@ public class MysqlPageInterceptor implements Interceptor {
         MappedStatement.Builder builder = new MappedStatement.Builder(ms.getConfiguration(), msId, ms.getSqlSource(), ms.getSqlCommandType());
         builder.resource(ms.getResource());
         builder.fetchSize(1);
-        builder.fetchSize(1);
-        builder.fetchSize(1);
         builder.statementType(ms.getStatementType());
         builder.timeout(ms.getTimeout());
         builder.parameterMap(new ParameterMap.Builder(ms.getConfiguration(),msId,Object.class,new ArrayList<>(0)).build());
-        List<ResultMap> resultMaps = new ArrayList<ResultMap>();
+        List<ResultMap> resultMaps = new ArrayList<>();
         resultMaps.add(new ResultMap.Builder(ms.getConfiguration(), msId, Long.class, new ArrayList<>(0)).build());
         builder.resultMaps(resultMaps);
         builder.resultSetType(ms.getResultSetType());
