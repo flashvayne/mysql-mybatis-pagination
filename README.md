@@ -1,3 +1,5 @@
+[![Maven central](https://maven-badges.herokuapp.com/maven-central/io.github.flashvayne/mysql-mybatis-pagination/badge.svg)](https://maven-badges.herokuapp.com/maven-central/io.github.flashvayne/mysql-mybatis-pagination)
+
 [中文版文档](https://github.com/flashvayne/mysql-mybatis-page/blob/master/README_zh.md)
 
 # mysql-mybatis-pagination
