@@ -1,3 +1,5 @@
+[![Maven central](https://maven-badges.herokuapp.com/maven-central/io.github.flashvayne/mysql-mybatis-pagination/badge.svg)](https://maven-badges.herokuapp.com/maven-central/io.github.flashvayne/mysql-mybatis-pagination)
+
 # mysql-mybatis-pagination
 基于MySQL方言 SQL_CALC_FOUND_ROWS & FOUND_ROWS() 的轻量级分页组件  
 "mysql-mybatis-page-1.0.0.jar" Release Package 大小仅10kb
