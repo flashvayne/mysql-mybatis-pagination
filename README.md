@@ -10,7 +10,7 @@ For SpringBoot project, interceptor will be autowired on startup, no additional 
 <dependency>
     <groupId>io.github.flashvayne</groupId>
     <artifactId>mysql-mybatis-pagination</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
 </dependency>
 ```
 2.Use the following code where pagination is required
