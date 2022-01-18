@@ -4,7 +4,7 @@
 
 # mysql-mybatis-pagination
 A very lightweight pagination interceptor based on MySQL Dialect "SQL_CALC_FOUND_ROWS & FOUND_ROWS()"  
-The released package ("mysql-mybatis-page-1.0.0.jar") size is only 10KB.
+The released package ("mysql-mybatis-pagination-1.0.1.jar") size is only 10KB.
 ## Usage
 1.Load maven dependency.  
 For SpringBoot project, interceptor will be autowired on startup, no additional configuration required.
