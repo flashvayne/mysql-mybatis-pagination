@@ -28,4 +28,4 @@ Pagination will not be applied to any query executed after line "Page.end()", un
 # Author Info
 Email: flashvayne@gmail.com
 
-Blog: https://blog.vayne.ink
+Blog: https://vayne.cc
