@@ -30,7 +30,7 @@ public class MysqlPageInterceptor implements Interceptor {
     private MappedStatement countMs;
     private BoundSql countBoundSql;
     private static final String countSql = "select FOUND_ROWS()";
-    private static final String tmpTable = "$mysql_page_tmp_table_x$";
+    private static final String tmpTable = "tmp_pagination_table";
     private static final String countMsId = "mysqlpage.count";
     @Override
     public Object intercept(Invocation invocation) throws Throwable {
