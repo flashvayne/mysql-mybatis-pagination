@@ -6,7 +6,7 @@
 
     <groupId>io.github.flashvayne</groupId>
     <artifactId>mysql-mybatis-pagination</artifactId>
-    <version>1.0.2</version>
+    <version>2.0.0</version>
 
     <name>mysql-mybatis-pagination</name>
     <description>基于MySQL方言 SQL_CALC_FOUND_ROWS 的轻量级分页组件</description>

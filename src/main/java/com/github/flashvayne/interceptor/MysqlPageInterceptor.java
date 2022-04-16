@@ -1,6 +1,7 @@
 package com.github.flashvayne.interceptor;
 
 import com.github.flashvayne.Page;
+import com.github.flashvayne.dto.PageContext;
 import com.github.flashvayne.dto.PageInfo;
 import org.apache.ibatis.cache.CacheKey;
 import org.apache.ibatis.executor.Executor;
@@ -31,10 +32,18 @@ public class MysqlPageInterceptor implements Interceptor {
     private BoundSql countBoundSql;
     private static final String countSql = "select FOUND_ROWS()";
     private static final String tmpTable = "tmp_pagination_table";
-    private static final String countMsId = "mysqlpage.count";
+    private static final String countMsId = "page.count";
     @Override
     public Object intercept(Invocation invocation) throws Throwable {
-        PageInfo pageInfo = Page.get();
+        PageContext pageContext = Page.get();
+        if(pageContext == null){
+            return invocation.proceed();
+        }
+        if(!pageContext.isActive()){
+            Page.clear();
+            return invocation.proceed();
+        }
+        PageInfo pageInfo = pageContext.getPageInfo();
         if(pageInfo == null) return invocation.proceed();
         int size = pageInfo.getSize();
         int start = (pageInfo.getPage() - 1) * size;
@@ -59,14 +68,19 @@ public class MysqlPageInterceptor implements Interceptor {
         calcSqlBuild.append("select SQL_CALC_FOUND_ROWS * from (");
         calcSqlBuild.append(sql).append(") ").append(tmpTable).append(" limit ").append(start).append(",").append(size);
         metaObject.setValue("sql", calcSqlBuild.toString());
-        List rsList = executor.query(ms,parameter,rowBounds,resultHandler,cacheKey,boundSql);
-        if(countMs == null) {
-            countMs = newCountMappedStatement(ms,countMsId);
-            countBoundSql = new BoundSql(countMs.getConfiguration(), countSql, null, null);
+        try {
+            List rsList = executor.query(ms,parameter,rowBounds,resultHandler,cacheKey,boundSql);
+            if(countMs == null) {
+                countMs = newCountMappedStatement(ms,countMsId);
+                countBoundSql = new BoundSql(countMs.getConfiguration(), countSql, null, null);
+            }
+            Object countResultList = executor.query(countMs,null,new RowBounds(),null,null,countBoundSql);
+            pageInfo.setTotal(((Number) ((List) countResultList).get(0)).longValue());
+            return rsList;
+        }finally {
+            pageContext.setActive(false);
         }
-        Object countResultList = executor.query(countMs,null,new RowBounds(),null,null,countBoundSql);
-        pageInfo.setTotal(((Number) ((List) countResultList).get(0)).longValue());
-        return rsList;
+
     }
 
     @Override

@@ -1,5 +1,6 @@
 package com.github.flashvayne;
 
+import com.github.flashvayne.dto.PageContext;
 import com.github.flashvayne.dto.PageInfo;
 
 /**
@@ -8,37 +9,49 @@ import com.github.flashvayne.dto.PageInfo;
  * @author flashvayne
  */
 public class Page {
-    private static final ThreadLocal<PageInfo> PageInfoThreadLocal = new ThreadLocal<>();
+    private static final ThreadLocal<PageContext> PageInfoThreadLocal = new ThreadLocal<>();
 
-    public static void set(PageInfo PageInfo) {
-        PageInfoThreadLocal.set(PageInfo);
+    public static void set(PageContext pageContext) {
+        PageInfoThreadLocal.set(pageContext);
     }
 
-    public static PageInfo get() {
+    public static PageContext get() {
         return PageInfoThreadLocal.get();
     }
 
     public static void start(int pageNum, int pageSize) {
-        PageInfo pageInfo = PageInfoThreadLocal.get();
+        PageContext pageContext = PageInfoThreadLocal.get();
+        if(pageContext == null){
+            pageContext = new PageContext();
+            pageContext.setActive(true);
+            pageContext.setPageInfo(new PageInfo());
+        }
+        PageInfo pageInfo = pageContext.getPageInfo();
         if (pageInfo == null) {
             pageInfo = new PageInfo();
+            pageContext.setPageInfo(pageInfo);
         }
         pageInfo.setPage(pageNum);
         pageInfo.setSize(pageSize);
-        PageInfoThreadLocal.set(pageInfo);
+        PageInfoThreadLocal.set(pageContext);
     }
 
     public static PageInfo end(Object o){
-        PageInfo pageInfo = PageInfoThreadLocal.get();
+        PageContext pageContext = PageInfoThreadLocal.get();
+        clear();
+        if(pageContext == null){
+            return null;
+        }
+        PageInfo pageInfo = pageContext.getPageInfo();
         if(pageInfo == null){
             return null;
         }
         pageInfo.setList(o);
-        try {
-            return pageInfo;
-        }finally {
-            PageInfoThreadLocal.remove();
-        }
+        return pageInfo;
+    }
+
+    public static void clear(){
+        PageInfoThreadLocal.remove();
     }
 
 }
