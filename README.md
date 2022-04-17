@@ -4,7 +4,6 @@
 
 # mysql-mybatis-pagination
 A very lightweight pagination interceptor based on MySQL Dialect "SQL_CALC_FOUND_ROWS & FOUND_ROWS()"  
-The released package ("mysql-mybatis-pagination-1.0.2.jar") size is only 10KB.
 ## Usage
 1.Load maven dependency.  
 For SpringBoot project, interceptor will be autowired on startup, no additional configuration required.
@@ -12,7 +11,7 @@ For SpringBoot project, interceptor will be autowired on startup, no additional 
 <dependency>
     <groupId>io.github.flashvayne</groupId>
     <artifactId>mysql-mybatis-pagination</artifactId>
-    <version>1.0.2</version>
+    <version>2.0.0</version>
 </dependency>
 ```
 2.Use the following code where pagination is required
@@ -23,8 +22,12 @@ PageInfo pageInfo = Page.end(users);
 logger.info("pageInfo: {}", pageInfo);
 ```
 *Notice：
-Pagination only takes effect between "Page.start()" and "Page.end()".
-Pagination will not be applied to any query executed after line "Page.end()", unless "Page.start()" is called again to start a new paging process.
+Pagination only takes effect at the first query after "Page.start()".  
+Pagination will not be applied to any query executed after line "Page.end()", unless "Page.start()" is called again to start a new paging process.  
+
+When you are using a thread poll and there is no query was invoked after "Page.start()", notice that invoke "Page.clear()" manually to end current paging process. So that when the current thread is invoked next time,the pagination will not take effect inexplicably.  
+(Because pagination is using ThreadLocal to take effect)
+
 # Author Info
 Email: flashvayne@gmail.com
 
