@@ -72,7 +72,7 @@ public class MysqlPageInterceptor implements Interceptor {
             List rsList = executor.query(ms,parameter,rowBounds,resultHandler,cacheKey,boundSql);
             if(countMs == null) {
                 countMs = newCountMappedStatement(ms,countMsId);
-                countBoundSql = new BoundSql(countMs.getConfiguration(), countSql, null, null);
+                countBoundSql = new BoundSql(countMs.getConfiguration(), countSql, new ArrayList<>(), null);
             }
             Object countResultList = executor.query(countMs,null,new RowBounds(),null,null,countBoundSql);
             pageInfo.setTotal(((Number) ((List) countResultList).get(0)).longValue());
