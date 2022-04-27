@@ -8,7 +8,7 @@ import lombok.Data;
  * @author flashvayne
  */
 @Data
-public class PageInfo {
+public class PageInfo<T> {
     //页码
     private int page;
 
@@ -19,5 +19,5 @@ public class PageInfo {
     private Long total;
 
     //当页列表
-    private Object list;
+    private T list;
 }

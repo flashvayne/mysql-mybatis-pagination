@@ -36,7 +36,7 @@ public class Page {
         PageInfoThreadLocal.set(pageContext);
     }
 
-    public static PageInfo end(Object o){
+    public static <T> PageInfo<T> end(T t){
         PageContext pageContext = PageInfoThreadLocal.get();
         clear();
         if(pageContext == null){
@@ -46,7 +46,7 @@ public class Page {
         if(pageInfo == null){
             return null;
         }
-        pageInfo.setList(o);
+        pageInfo.setList(t);
         return pageInfo;
     }
 
