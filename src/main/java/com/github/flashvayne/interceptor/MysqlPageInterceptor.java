@@ -40,7 +40,6 @@ public class MysqlPageInterceptor implements Interceptor {
             return invocation.proceed();
         }
         if(!pageContext.isActive()){
-            Page.clear();
             return invocation.proceed();
         }
         PageInfo pageInfo = pageContext.getPageInfo();
