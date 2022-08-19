@@ -28,10 +28,6 @@ import java.util.Properties;
         @Signature(type = Executor.class, method = "query", args = {MappedStatement.class, Object.class, RowBounds.class, ResultHandler.class, CacheKey.class, BoundSql.class})})
 public class MysqlPageInterceptor implements Interceptor {
 
-    private MappedStatement countMs;
-    private BoundSql countBoundSql;
-    private static final String countSql = "select FOUND_ROWS()";
-    private static final String tmpTable = "tmp_pagination_table";
     private static final String countMsId = "page.count";
     @Override
     public Object intercept(Invocation invocation) throws Throwable {
@@ -63,17 +59,17 @@ public class MysqlPageInterceptor implements Interceptor {
         }
         MetaObject metaObject = SystemMetaObject.forObject(boundSql);
         String sql = (String) metaObject.getValue("sql");
-        StringBuilder calcSqlBuild = new StringBuilder();
-        calcSqlBuild.append("select SQL_CALC_FOUND_ROWS * from (");
-        calcSqlBuild.append(sql).append(") ").append(tmpTable).append(" limit ").append(start).append(",").append(size);
+        StringBuilder calcSqlBuild = new StringBuilder(sql);
+        calcSqlBuild.append(" limit ").append(start).append(",").append(size);
         metaObject.setValue("sql", calcSqlBuild.toString());
+        StringBuilder countSqlBuilder = new StringBuilder();
+        countSqlBuilder.append("select count(*) from (").append(sql).append(") tmp");
         try {
             List rsList = executor.query(ms,parameter,rowBounds,resultHandler,cacheKey,boundSql);
-            if(countMs == null) {
-                countMs = newCountMappedStatement(ms,countMsId);
-                countBoundSql = new BoundSql(countMs.getConfiguration(), countSql, new ArrayList<>(), null);
-            }
-            Object countResultList = executor.query(countMs,null,new RowBounds(),null,null,countBoundSql);
+            MappedStatement countMs = newCountMappedStatement(ms,countMsId);
+            BoundSql countBoundSql = new BoundSql(countMs.getConfiguration(), countSqlBuilder.toString(), boundSql.getParameterMappings(),
+                        boundSql.getParameterObject());
+            Object countResultList = executor.query(countMs,parameter,new RowBounds(),null,null,countBoundSql);
             pageInfo.setTotal(((Number) ((List) countResultList).get(0)).longValue());
             return rsList;
         }finally {
